@@ -23,7 +23,7 @@ struct URL {
       return nil
     }
 
-    path = "/" + parts1[1..<parts1.count].joinWithSeparator("/")
+    path = "/" + parts1[1..<parts1.count].joined(separator: "/")
 
     let address = parts1[0]
 

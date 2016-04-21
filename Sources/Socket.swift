@@ -36,11 +36,11 @@ private let system_connect = Darwin.connect
 @_silgen_name("fcntl") private func fcntl(descriptor: Int32, _ command: Int32, _ flags: Int32) -> Int32
 
 
-struct SocketError : ErrorType, CustomStringConvertible {
+struct SocketError : ErrorProtocol, CustomStringConvertible {
   let function: String
   let number: Int32
 
-  init(function: String = __FUNCTION__) {
+  init(function: String = #function) {
     self.function = function
     self.number = errno
   }
@@ -94,7 +94,7 @@ class Socket {
     addr.sin_family = sa_family_t(AF_INET)
     addr.sin_port = in_port_t(htons(in_port_t(port)))
     addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
-    memcpy(&addr.sin_addr, host.memory.h_addr_list[0], Int(host.memory.h_length))
+    memcpy(&addr.sin_addr, host.pointee.h_addr_list[0], Int(host.pointee.h_length))
 
     let len = socklen_t(UInt8(sizeof(sockaddr_in)))
     guard system_connect(descriptor, sockaddr_cast(&addr), len) != -1 else {

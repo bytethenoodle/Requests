@@ -5,7 +5,7 @@ import Inquiline
 public typealias Header = (String, String)
 
 
-public enum RequestError : ErrorType {
+public enum RequestError : ErrorProtocol {
   case InvalidURL
   case UnsupportedScheme(String)
 }

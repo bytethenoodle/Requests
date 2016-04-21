@@ -18,12 +18,12 @@ class Data {
   }
 
   var characters: [CChar] {
-    var data = [CChar](count: capacity, repeatedValue: 0)
+    var data = [CChar](repeating: 0, count: capacity)
     memcpy(&data, bytes, data.count)
     return data
   }
 
   var string: String? {
-    return String.fromCString(bytes)
+    return String(cString: bytes)
   }
 }

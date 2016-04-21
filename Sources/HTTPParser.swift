@@ -7,7 +7,7 @@ import Nest
 import Inquiline
 
 
-enum HTTPParserError : ErrorType {
+enum HTTPParserError : ErrorProtocol {
     case Unknown
 }
 
@@ -33,11 +33,8 @@ class HTTPParser {
 
         let crln: [CChar] = [13, 10, 13, 10]
         if let (top, bottom) = buffer.find(crln) {
-          if let headers = String.fromCString(top + [0]) {
-            return (headers, bottom)
-          }
-
-          return nil
+          let headers = String(cString: top + [0])
+          return (headers, bottom)
         }
       }
     }
@@ -88,7 +85,7 @@ class HTTPParser {
         readLength += bytes.count
       }
 
-      body = String.fromCString(buffer + [0])
+      body = String(cString: buffer + [0])
     }
 
     return Response(status, headers: headers, content: body)
@@ -110,13 +107,13 @@ class HTTPParser {
 }
 
 
-extension CollectionType where Generator.Element == CChar {
+extension Collection where Iterator.Element == CChar {
   func find(characters: [CChar]) -> ([CChar], [CChar])? {
     var lhs: [CChar] = []
     var rhs = Array(self)
 
     while !rhs.isEmpty {
-      let character = rhs.removeAtIndex(0)
+      let character = rhs.remove(at: 0)
       lhs.append(character)
       if lhs.hasSuffix(characters) {
         return (lhs, rhs)
@@ -149,7 +146,7 @@ extension String {
     }
 
     for var idx = 0; idx < prefixCharacters.count; idx++ {
-      if characters[start.advancedBy(idx)] != prefixCharacters[prefixStart.advancedBy(idx)] {
+      if characters[start.advanced(by: idx)] != prefixCharacters[prefixStart.advanced(by: idx)] {
         return false
       }
     }
