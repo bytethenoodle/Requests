@@ -7,7 +7,7 @@ import Nest
 import Inquiline
 
 
-enum HTTPParserError : ErrorProtocol {
+enum HTTPParserError : Error {
     case Unknown
 }
 
@@ -24,7 +24,7 @@ class HTTPParser {
     var buffer: [CChar] = []
 
     while true {
-      if let bytes = try? socket.read(512) {
+      if let bytes = try? socket.read(bytes: 512) {
         if bytes.isEmpty {
           return nil
         }
@@ -32,7 +32,7 @@ class HTTPParser {
         buffer += bytes
 
         let crln: [CChar] = [13, 10, 13, 10]
-        if let (top, bottom) = buffer.find(crln) {
+        if let (top, bottom) = buffer.find(characters: crln) {
           let headers = String(cString: top + [0])
           return (headers, bottom)
         }
@@ -45,10 +45,10 @@ class HTTPParser {
       throw HTTPParserError.Unknown
     }
 
-    var components = top.split("\r\n")
+    var components = top.split(separator: "\r\n")
     let requestLine = components.removeFirst()
     components.removeLast()
-    let responseComponents = requestLine.split(" ")
+    let responseComponents = requestLine.split(separator: " ")
     if responseComponents.count < 3 {
       throw HTTPParserError.Unknown
     }
@@ -67,7 +67,7 @@ class HTTPParser {
       throw HTTPParserError.Unknown
     }
 
-    let headers = parseHeaders(components)
+    let headers = parseHeaders(headers: components)
     let contentLength = Int(headers.filter { $0.0 == "Content-Length" }.first?.1 ?? "0") ?? 0
 
     var body: String? = nil
@@ -77,7 +77,7 @@ class HTTPParser {
       var readLength = bodyPart.count
 
       while contentLength > readLength {
-        let bytes = try socket.read(2048)
+        let bytes = try socket.read(bytes: 2048)
         if bytes.isEmpty {
           throw HTTPParserError.Unknown // Server closed before sending complete body
         }
@@ -92,10 +92,10 @@ class HTTPParser {
   }
 
   func parseHeaders(headers: [String]) -> [Header] {
-    return headers.map { $0.split(":", maxSplit: 1) }.flatMap {
+    return headers.map { $0.split(separator: ":", maxSplit: 1) }.flatMap {
       if $0.count == 2 {
         if $0[1].characters.first == " " {
-          let value = String($0[1].characters[$0[1].startIndex.successor()..<$0[1].endIndex])
+          let value = String($0[1].characters[$0[1].index(after: $0[1].startIndex)..<$0[1].endIndex])
           return ($0[0], value)
         }
         return ($0[0], $0[1])
@@ -115,7 +115,7 @@ extension Collection where Iterator.Element == CChar {
     while !rhs.isEmpty {
       let character = rhs.remove(at: 0)
       lhs.append(character)
-      if lhs.hasSuffix(characters) {
+      if lhs.hasSuffix(characters: characters) {
         return (lhs, rhs)
       }
     }
@@ -138,17 +138,15 @@ extension String {
   func hasPrefix(prefix: String) -> Bool {
     let characters = utf16
     let prefixCharacters = prefix.utf16
-    let start = characters.startIndex
-    let prefixStart = prefixCharacters.startIndex
 
     if characters.count < prefixCharacters.count {
       return false
     }
 
-    for var idx = 0; idx < prefixCharacters.count; idx++ {
-      if characters[start.advanced(by: idx)] != prefixCharacters[prefixStart.advanced(by: idx)] {
-        return false
-      }
+    for idx in 0..<prefixCharacters.count {
+        if characters[characters.index(characters.startIndex, offsetBy: idx)] != prefixCharacters[prefixCharacters.index(prefixCharacters.startIndex, offsetBy: idx)] {
+            return false
+        }
     }
 
     return true

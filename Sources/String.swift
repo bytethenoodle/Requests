@@ -23,7 +23,7 @@ class Scanner {
       characters.append(character)
 
       if content.hasPrefix(until) {
-        let index = content.characters.startIndex.advanced(by: until.characters.count)
+        let index = content.characters.index(content.characters.startIndex, offsetBy: until.characters.count)
         content = String(content.characters[index..<content.characters.endIndex])
         break
       }

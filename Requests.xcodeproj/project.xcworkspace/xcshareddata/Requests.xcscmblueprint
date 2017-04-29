@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DE2272125864C1638D726DA1B9A9EF60732C48A8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "3A37CCCB8009D2857E722C0BFF570B1C7EB8A4FB" : 9223372036854775807,
+    "76A51B5AA54C2B42125986C7843A78515A860370" : 9223372036854775807,
+    "DE2272125864C1638D726DA1B9A9EF60732C48A8" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "32A17772-1B2D-4D10-8062-FADA6781977B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "3A37CCCB8009D2857E722C0BFF570B1C7EB8A4FB" : "Requests\/.build\/checkouts\/Inquiline--5421921148665507002\/",
+    "76A51B5AA54C2B42125986C7843A78515A860370" : "Requests\/.build\/checkouts\/Nest.git--2185935898851902116\/",
+    "DE2272125864C1638D726DA1B9A9EF60732C48A8" : "Requests\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Requests",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Requests.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "\/Users\/noodlebytes\/Documents\/Git\/Remote\/Github\/IBM\/Requests\/.build\/repositories\/Inquiline--5421921148665507002",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3A37CCCB8009D2857E722C0BFF570B1C7EB8A4FB"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "\/Users\/noodlebytes\/Documents\/Git\/Remote\/Github\/IBM\/Requests\/.build\/repositories\/Nest.git--2185935898851902116",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "76A51B5AA54C2B42125986C7843A78515A860370"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:bytethenoodle\/Requests.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DE2272125864C1638D726DA1B9A9EF60732C48A8"
+    }
+  ]
+}

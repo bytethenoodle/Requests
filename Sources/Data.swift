@@ -9,7 +9,7 @@ class Data {
   let capacity: Int
 
   init(capacity: Int) {
-    bytes = UnsafeMutablePointer<Int8>(malloc(capacity + 1))
+    bytes = UnsafeMutablePointer<Int8>.allocate(capacity: capacity + 1)
     self.capacity = capacity
   }
 

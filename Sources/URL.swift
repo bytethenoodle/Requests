@@ -5,7 +5,7 @@ struct URL {
   let path: String
 
   init?(string: String) {
-    let parts = string.split("://", maxSplit: 1)
+    let parts = string.split(separator: "://", maxSplit: 1)
     if parts.count != 2 {
       scheme = ""
       hostname = ""
@@ -15,7 +15,7 @@ struct URL {
     }
 
     scheme = parts[0]
-    let parts1 = parts[1].split("/")
+    let parts1 = parts[1].split(separator: "/")
     if parts1.count < 2 {
       hostname = ""
       port = 80
@@ -27,7 +27,7 @@ struct URL {
 
     let address = parts1[0]
 
-    let parts2 = address.split(":", maxSplit: 1)
+    let parts2 = address.split(separator: ":", maxSplit: 1)
     if parts2.count > 1 {
       hostname = parts2[0]
       if let port = Int16(parts2[1]) {

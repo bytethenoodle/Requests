@@ -5,7 +5,7 @@ import Inquiline
 public typealias Header = (String, String)
 
 
-public enum RequestError : ErrorProtocol {
+public enum RequestError : Error {
   case InvalidURL
   case UnsupportedScheme(String)
 }
@@ -23,15 +23,15 @@ func createRequest(method: String, path: String, hostname: String, headers: [Hea
 
 
 func sendRequest(socket: Socket, request: RequestType) {
-  socket.write("\(request.method) \(request.path) HTTP/1.1\r\n")
+  socket.write(output: "\(request.method) \(request.path) HTTP/1.1\r\n")
   for (key, value) in request.headers {
-    socket.write("\(key): \(value)\r\n")
+    socket.write(output: "\(key): \(value)\r\n")
   }
-  socket.write("\r\n")
+  socket.write(output: "\r\n")
 
   if var body = request.body {
     while let chunk = body.next() {
-      socket.write(chunk)
+        socket.write(output: chunk)
     }
   }
 }
@@ -47,9 +47,9 @@ public func request(method method: String, url: String, headers: [Header]? = nil
   }
 
   let socket = try Socket()
-  try socket.connect(url.hostname, port: url.port)
-  let request = createRequest(method, path: url.path, hostname: url.hostname, headers: headers ?? [], body: body)
-  sendRequest(socket, request: request)
+  try socket.connect(hostname: url.hostname, port: url.port)
+  let request = createRequest(method: method, path: url.path, hostname: url.hostname, headers: headers ?? [], body: body)
+  sendRequest(socket: socket, request: request)
 
   let parser = HTTPParser(socket: socket)
   let response = try parser.parse()

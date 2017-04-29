@@ -36,7 +36,7 @@ private let system_connect = Darwin.connect
 @_silgen_name("fcntl") private func fcntl(descriptor: Int32, _ command: Int32, _ flags: Int32) -> Int32
 
 
-struct SocketError : ErrorProtocol, CustomStringConvertible {
+struct SocketError : Error, CustomStringConvertible {
   let function: String
   let number: Int32
 
@@ -75,7 +75,7 @@ class Socket {
     assert(descriptor > 0)
 
     var value: Int32 = 1
-    guard setsockopt(descriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) != -1 else {
+    guard setsockopt(descriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(MemoryLayout<Int32>.size)) != -1 else {
       throw SocketError(function: "setsockopt()")
     }
   }
@@ -92,12 +92,12 @@ class Socket {
 
     var addr = sockaddr_in()
     addr.sin_family = sa_family_t(AF_INET)
-    addr.sin_port = in_port_t(htons(in_port_t(port)))
+    addr.sin_port = in_port_t(htons(value: in_port_t(port)))
     addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
-    memcpy(&addr.sin_addr, host.pointee.h_addr_list[0], Int(host.pointee.h_length))
+    memcpy(&addr.sin_addr, host?.pointee.h_addr_list[0], Int((host?.pointee.h_length)!))
 
-    let len = socklen_t(UInt8(sizeof(sockaddr_in)))
-    guard system_connect(descriptor, sockaddr_cast(&addr), len) != -1 else {
+    let len = socklen_t(UInt8(MemoryLayout<sockaddr_in>.size))
+    guard system_connect(descriptor, sockaddr_cast(p: &addr), len) != -1 else {
       throw SocketError()
     }
   }
@@ -142,7 +142,7 @@ class Socket {
     return (value << 8) + (value >> 8)
   }
 
-  private func sockaddr_cast(p: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<sockaddr> {
-    return UnsafeMutablePointer<sockaddr>(p)
+  private func sockaddr_cast(p: UnsafeMutableRawPointer) -> UnsafePointer<sockaddr> {
+    return UnsafeRawPointer(p).assumingMemoryBound(to: sockaddr.self)
   }
 }
